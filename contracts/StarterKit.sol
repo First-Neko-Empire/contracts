@@ -18,12 +18,16 @@ contract StarterKit is Ownable, Pausable {
         _characters = ICharacters(_char);
     }
 
+    // PUBLIC
+
     function openStarterKit() external whenNotPaused {
         require(!_isDraw[msg.sender]);
 
         _characters.mintBatch(msg.sender, _startCharacters, _startAmount);
         _isDraw[msg.sender] = true;
     }
+
+    // OWNER
 
     function pause() external onlyOwner {
         _pause();

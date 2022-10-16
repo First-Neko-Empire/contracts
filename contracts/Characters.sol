@@ -15,28 +15,10 @@ contract Characters is ERC1155, AccessControl {
         _characters = 30;
     }
 
+    // OWNER
+
     function setURI(string memory _newuri) external onlyRole(DEFAULT_ADMIN_ROLE) {
         _setURI(_newuri);
-    }
-
-    function mint(address account, uint256 id, uint256 amount) external onlyRole(MINTER) {
-        require(id < _characters, "unknown character");
-        _mint(account, id, amount, "");
-    }
-
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts) external onlyRole(MINTER) {
-        _mintBatch(to, ids, amounts, "");
-    }
-
-    function getBalanceByAddress(address _user) external view returns(uint256[] memory) {
-        uint256[] memory _invertory = new uint256[](_characters);
-        uint256 i = 0;
-        while (i < _characters){
-            uint256 amount = balanceOf(_user, i);
-            _invertory[i] = amount;
-            i++;
-        }
-        return _invertory;    
     }
 
     function updateCharacter(uint256 _addAmount) external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -49,6 +31,34 @@ contract Characters is ERC1155, AccessControl {
 
     function revorkeRoleMinter(address _minter) external onlyRole(DEFAULT_ADMIN_ROLE) {
         revokeRole(MINTER, _minter);
+    }
+
+    function setupRoleAdmin(address _admin) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setupRole(DEFAULT_ADMIN_ROLE, _admin);
+    }
+
+    // MINTER
+
+    function mint(address account, uint256 id, uint256 amount) external onlyRole(MINTER) {
+        require(id < _characters, "unknown character");
+        _mint(account, id, amount, "");
+    }
+
+    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts) external onlyRole(MINTER) {
+        _mintBatch(to, ids, amounts, "");
+    }
+
+    // GETTERS
+
+    function getBalanceByAddress(address _user) external view returns(uint256[] memory) {
+        uint256[] memory _invertory = new uint256[](_characters);
+        uint256 i = 0;
+        while (i < _characters){
+            uint256 amount = balanceOf(_user, i);
+            _invertory[i] = amount;
+            i++;
+        }
+        return _invertory;    
     }
 
     function supportsInterface(bytes4 interfaceId) public view override(ERC1155, AccessControl) returns (bool) {
