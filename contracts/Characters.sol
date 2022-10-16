@@ -4,6 +4,10 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
+interface ICharacter {
+    
+}
+
 contract Characters is ERC1155, AccessControl {
 
     uint256 private _characters;
